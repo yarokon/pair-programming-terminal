@@ -1,0 +1,204 @@
+openapi: 3.1.0
+info:
+  title: Redocly Museum API
+  description: >-
+    Imaginary, but delightful Museum API for interacting with museum services
+    and information. Built with love by Redocly.
+  version: 1.1.1
+  termsOfService: https://redocly.com/subscription-agreement/
+  contact:
+    email: team@redocly.com
+    url: https://redocly.com/docs/cli/
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
+servers:
+  - url: https://redocly.com/_mock/demo/openapi/museum-api
+paths:
+  /tickets:
+    post:
+      summary: Buy museum tickets
+      description: Purchase museum tickets for general entry or special events.
+      operationId: buyMuseumTickets
+      tags:
+        - Tickets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuyMuseumTicketsRequest'
+            examples:
+              general_entry:
+                $ref: '#/components/examples/BuyGeneralTicketsRequestExample'
+              event_entry:
+                $ref: '#/components/examples/BuyEventTicketsRequestExample'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuyMuseumTicketsResponse'
+              examples:
+                general_entry:
+                  $ref: '#/components/examples/BuyGeneralTicketsResponseExample'
+                event_entry:
+                  $ref: '#/components/examples/BuyEventTicketsResponseExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    TicketType:
+      description: >-
+        Type of ticket being purchased. Use `general` for regular museum entry
+        and `event` for tickets to special events.
+      type: string
+      enum:
+        - event
+        - general
+      example: event
+    Date:
+      type: string
+      format: date
+      example: '2023-10-29'
+    Email:
+      description: Email address for ticket purchaser.
+      type: string
+      format: email
+      example: museum-lover@example.com
+    Phone:
+      description: Phone number for the ticket purchaser (optional).
+      type: string
+      example: +1(234)-567-8910
+    BuyMuseumTicketsRequest:
+      description: Request payload used for purchasing museum tickets.
+      type: object
+      properties:
+        ticketType:
+          $ref: '#/components/schemas/TicketType'
+        eventId:
+          description: >-
+            Unique identifier for a special event. Required if purchasing
+            tickets for the museum's special events.
+          $ref: '#/components/schemas/EventId'
+        ticketDate:
+          description: Date that the ticket is valid for.
+          $ref: '#/components/schemas/Date'
+        email:
+          $ref: '#/components/schemas/Email'
+        phone:
+          $ref: '#/components/schemas/Phone'
+      required:
+        - ticketType
+        - ticketDate
+        - email
+    TicketMessage:
+      description: Confirmation message after a ticket purchase.
+      type: string
+      example: Museum general entry ticket purchased
+    TicketId:
+      description: Unique identifier for museum ticket. Generated when purchased.
+      type: string
+      format: uuid
+      example: a54a57ca-36f8-421b-a6b4-2e8f26858a4c
+    TicketConfirmation:
+      description: Unique confirmation code used to verify ticket purchase.
+      type: string
+      example: ticket-event-a98c8f-7eb12
+    BuyMuseumTicketsResponse:
+      description: Details for a museum ticket after a successful purchase.
+      type: object
+      properties:
+        message:
+          $ref: '#/components/schemas/TicketMessage'
+        eventName:
+          $ref: '#/components/schemas/EventName'
+        ticketId:
+          $ref: '#/components/schemas/TicketId'
+        ticketType:
+          $ref: '#/components/schemas/TicketType'
+        ticketDate:
+          description: Date the ticket is valid for.
+          $ref: '#/components/schemas/Date'
+        confirmationCode:
+          $ref: '#/components/schemas/TicketConfirmation'
+      required:
+        - message
+        - ticketId
+        - ticketType
+        - ticketDate
+        - confirmationCode
+    EventId:
+      description: Identifier for a special event.
+      type: string
+      format: uuid
+      example: 3be6453c-03eb-4357-ae5a-984a0e574a54
+    EventName:
+      type: string
+      description: Name of the special event.
+      example: Pirate Coding Workshop
+    Error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: object
+        title:
+          type: string
+          example: Validation failed
+  securitySchemes:
+    MuseumPlaceholderAuth:
+      type: http
+      scheme: basic
+  examples:
+    BuyGeneralTicketsRequestExample:
+      summary: General entry ticket
+      value:
+        ticketType: general
+        ticketDate: '2023-09-07'
+        email: todd@example.com
+    BuyEventTicketsRequestExample:
+      summary: Special event ticket
+      value:
+        ticketType: general
+        eventId: dad4bce8-f5cb-4078-a211-995864315e39
+        ticketDate: '2023-09-05'
+        email: todd@example.com
+    BuyGeneralTicketsResponseExample:
+      summary: General entry ticket
+      value:
+        message: Museum general entry ticket purchased
+        ticketId: 382c0820-0530-4f4b-99af-13811ad0f17a
+        ticketType: general
+        ticketDate: '2023-09-07'
+        confirmationCode: ticket-general-e5e5c6-dce78
+    BuyEventTicketsResponseExample:
+      summary: Special event ticket
+      value:
+        message: Museum special event ticket purchased
+        ticketId: b811f723-17b2-44f7-8952-24b03e43d8a9
+        eventName: Mermaid Treasure Identification and Analysis
+        ticketType: event
+        ticketDate: '2023-09-05'
+        confirmationCode: ticket-event-9c55eg-8v82a
+  responses:
+    BadRequest:
+      description: Bad request.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+tags:
+  - name: Tickets
+    description: Museum tickets for general entrance or special events.
+security:
+  - MuseumPlaceholderAuth: []
