@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    environment:
+      - GIT_REPO_URL=https://github.com/your-username/your-repo.git
+      - GIT_BRANCH=main
+    command: >
+      sh -c "
+        git clone $$GIT_REPO_URL /app/repo &&
+        cd /app/repo &&
+        git checkout $$GIT_BRANCH
+      "
