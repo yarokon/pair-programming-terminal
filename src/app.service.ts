@@ -35,16 +35,17 @@ async function checkDirectoryExists(directoryPath) {
 
 async function readNodeLevel(directoryPath: string): Promise<FileNode[]> {
   const nodes: FileNode[] = [];
-  process.stdout.write('');
+  process.stdout.write('\r\n readNodeLevel ' + directoryPath);
   const entries = await fs.readdir(directoryPath, { withFileTypes: true });
+  process.stdout.write('\r\n readNodeLevel entries.length = ' + entries.length);
 
-  entries.forEach(async (element) => {
+  for (const element of entries) {
 
     if (element.isDirectory()) {
       const node: FileNode = {
         path: element.path,
         type: 'directory',
-        children: await readNodeLevel(element.path)
+        children: await readNodeLevel(element.path + '/' + element.name)
       }
 
       nodes.push(node);
@@ -55,8 +56,9 @@ async function readNodeLevel(directoryPath: string): Promise<FileNode[]> {
       type: 'file',
     }
     nodes.push(node);
-  });
+  }
 
+  process.stdout.write('\r\n readNodeLevel return nodes = ' + nodes.length);
   return nodes;
 }
 
@@ -74,7 +76,6 @@ export class AppService {
 
       const entries = await readNodeLevel(dirPath);
 
-      console.log(); // Promise<FileNode[]>
       return JSON.stringify(entries);
     } catch (e) {
       /* handle all errors here */
