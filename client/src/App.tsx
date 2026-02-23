@@ -1,4 +1,4 @@
-import { Editor } from './components/Editor';
+import { Editor } from './components/Editor/Editor';
 import { TerminalContextProvider } from 'react-terminal';
 import { Terminal } from './components/Terminal';
 
