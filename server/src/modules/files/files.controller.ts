@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
-import { FilesService } from './files.service';
+import { Controller, Get, Param } from '@nestjs/common';
+import { FileNode, FilesService } from './files.service';
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Get()
-  getFiles(): string[] {
-    return this.filesService.getFiles();
+  @Get(':owner/:repoName')
+  async getFiles(
+    @Param('owner') owner: string,
+    @Param('repoName') repoName: string,
+  ): Promise<FileNode[]> {
+    return await this.filesService.getFiles(owner, repoName);
   }
 }
