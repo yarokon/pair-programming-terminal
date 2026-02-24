@@ -5,7 +5,7 @@ import { FileNode, FilesService } from './files.service';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  // Implement getFileContent. filePath should be passed as query parameter.
+  // Implement getFileContent. file should be passed as query parameter.
 
   @Get('files/:owner/:repoName')
   async getFiles(
