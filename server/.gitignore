@@ -3,6 +3,9 @@
 /node_modules
 /build
 
+# cloned repositories
+/repositories
+
 # Logs
 logs
 *.log
