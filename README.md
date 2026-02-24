@@ -13,7 +13,7 @@ npm run install:all
 Build a feature that lets the user browse a public GitHub repository in the browser.
 
 1. **Get file tree** — returns the file tree for a repo. Clones or pulls it behind the scenes.
-2. **Get file content** — returns the content of a single file from the repo.
+2. **Get file content** — returns the content of a single file from the repo. Clones or pulls it behind the scenes.
 
 The client displays the file tree in the sidebar and opens files in the Monaco editor.
 
@@ -26,13 +26,18 @@ sequenceDiagram
     participant Client
     participant Server
     participant FS as Server Filesystem
+    participant GitHub
 
     Client->>Server: GET /files/:owner/:repoName
-    Server->>FS: git clone / git pull
-    FS-->>Server: done
+    Server->>GitHub: git clone / git pull
+    GitHub-->>FS: store repo
+    Server->>FS: read file tree
+    FS-->>Server: file tree
     Server-->>Client: file tree []
 
     Client->>Server: GET /file-content/:owner/:repoName?file=src/index.ts
+    Server->>GitHub: git clone / git pull
+    GitHub-->>FS: store repo
     Server->>FS: read file
     FS-->>Server: file content
     Server-->>Client: { content }
