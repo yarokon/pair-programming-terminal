@@ -80,7 +80,13 @@ export class FilesService {
       withFileTypes: true, // You can use entry.isDirectory() and entry.name
     });
 
-    console.log('entries', entries)
+    const fileNode: FileNode[] = [];
+
+    // loop entries
+
+    //currNode
+    // currNode entry.isDirectory ? 'directory' : 'file'
+    // /
 
 
 
