@@ -1,11 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { FileNode, FilesService } from './files.service';
 
-@Controller('files')
+@Controller()
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Get(':owner/:repoName')
+  // Implement getFileContent. filePath should be passed as query parameter.
+
+  @Get('files/:owner/:repoName')
   async getFiles(
     @Param('owner') owner: string,
     @Param('repoName') repoName: string,

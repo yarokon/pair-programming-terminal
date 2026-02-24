@@ -16,12 +16,32 @@ export type FileNode = {
 export class FilesService {
   /**
    * TODO list:
-   * [] Clone repo
-   * [] Pull repo if exists
+   * [] Use cloneOrPullRepo
+   * [] Return file content
+   */
+  public async getFileContent(
+    owner: string,
+    repoName: string,
+    filePath: string,
+  ): Promise<string> {
+    return '';
+  }
+
+  /**
+   * TODO list:
    * [] Call createFileTree
    * [] Handle 404 error
    */
-  async getFiles(owner: string, repoName: string): Promise<FileNode[]> {
+  public async getFiles(owner: string, repoName: string): Promise<FileNode[]> {
+    return [];
+  }
+
+  /**
+   * TODO list:
+   * [] Clone repo
+   * [] Pull repo if exists
+   */
+  private async cloneOrPullRepo(owner: string, repoName: string) {
     const repositoriesDir = path.resolve(process.cwd(), 'repositories');
 
     const repoUrl = `https://github.com/${owner}/${repoName}.git`;
