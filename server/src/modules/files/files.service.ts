@@ -33,7 +33,13 @@ export class FilesService {
    * [] Handle 404 error
    */
   public async getFiles(owner: string, repoName: string): Promise<FileNode[]> {
-    return [];
+    await this.cloneOrPullRepo(owner, repoName);
+
+
+    const currDir = ''
+    await this.createFileTree(currDir)
+
+    return []
   }
 
   /**
@@ -47,7 +53,18 @@ export class FilesService {
     const repoUrl = `https://github.com/${owner}/${repoName}.git`;
     const repoDir = path.join(repositoriesDir, owner, repoName);
 
+    const isRepoExists = fs.existsSync(repoDir)
+
+    if (!isRepoExists) {
+      return 'Repo already exists'
+    }
+
+
     const git = simpleGit();
+
+    git.clone(repoUrl, repoDir)
+      .catch((err) => console.error('failed: ', err));
+
 
     return [];
   }
@@ -62,6 +79,10 @@ export class FilesService {
     const entries = await fs.promises.readdir(currentDir, {
       withFileTypes: true, // You can use entry.isDirectory() and entry.name
     });
+
+    console.log('entries', entries)
+
+
 
     return [];
   }
