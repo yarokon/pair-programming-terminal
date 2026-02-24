@@ -6,6 +6,20 @@
 npm run install:all
 ```
 
+## Start
+
+**Server**
+
+```bash
+cd server && npm run start:dev
+```
+
+**Client**
+
+```bash
+cd client && npm run dev
+```
+
 ---
 
 ## Task (1 hour)
@@ -49,7 +63,7 @@ sequenceDiagram
 
 ## Endpoints to implement
 
-| Method | Path                                   | Description                                              |
-| ------ | -------------------------------------- | -------------------------------------------------------- |
-| `GET`  | `/files/:owner/:repoName`              | Clone or pull repo (behind the scenes), return file tree |
-| `GET`  | `/file-content/:owner/:repoName?file=` | Return content of a single file                          |
+| Method | Path                                   | Description                     |
+| ------ | -------------------------------------- | ------------------------------- |
+| `GET`  | `/files/:owner/:repoName`              | Return file tree                |
+| `GET`  | `/file-content/:owner/:repoName?file=` | Return content of a single file |
