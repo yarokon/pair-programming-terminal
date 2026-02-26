@@ -41,26 +41,25 @@ export class FilesService {
    * [] Clone repo
    * [] Pull repo if exists
    */
-  private async cloneOrPullRepo(owner: string, repoName: string) {
-    const repositoriesDir = path.resolve(process.cwd(), 'repositories');
-
+  private async cloneOrPullRepo(
+    owner: string,
+    repoName: string,
+  ): Promise<void> {
     const repoUrl = `https://github.com/${owner}/${repoName}.git`;
-    const repoDir = path.join(repositoriesDir, owner, repoName);
+    const repoDir = path.resolve('repositories', owner, repoName);
 
     const git = simpleGit();
-
-    return [];
   }
 
   /**
    * TODO list:
    * [] implement createFileTree which returns FileNode[]
    * [] ignore .git directory
-   * [] use relative paths
+   * [] use path.basename to extractfile/folder name from the path
    */
   private async createFileTree(currentDir: string): Promise<FileNode[]> {
     const entries = await fs.promises.readdir(currentDir, {
-      withFileTypes: true, // You can use entry.isDirectory() and entry.name
+      withFileTypes: true, // Use entry.isDirectory() and entry.name
     });
 
     return [];
