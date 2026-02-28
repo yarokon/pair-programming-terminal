@@ -5,8 +5,7 @@ import { FileNode, FilesService } from './files.service';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  // Implement getFileContent. file should be passed as query parameter.
-
+  // GET http://localhost:3000/files/todo-md/todo-md
   @Get('files/:owner/:repoName')
   async getFiles(
     @Param('owner') owner: string,
@@ -14,4 +13,7 @@ export class FilesController {
   ): Promise<FileNode[]> {
     return await this.filesService.getFiles(owner, repoName);
   }
+
+  // TODO: Implement getFileContent.
+  // GET http://localhost:3000/file-content/todo-md/todo-md?file=README.md
 }

@@ -3,8 +3,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { simpleGit } from 'simple-git';
 
-// GET http://localhost:3000/files/todo-md/todo-md
-
 // TODO: Change to discriminated union type
 export type FileNode = {
   path: string;
@@ -17,18 +15,6 @@ export class FilesService {
   /**
    * TODO list:
    * [] Use cloneOrPullRepo
-   * [] Return file content
-   */
-  public async getFileContent(
-    owner: string,
-    repoName: string,
-    filePath: string,
-  ): Promise<string> {
-    return '';
-  }
-
-  /**
-   * TODO list:
    * [] Call createFileTree
    * [] Handle 404 error
    */
@@ -38,15 +24,28 @@ export class FilesService {
 
   /**
    * TODO list:
+   * [] Use cloneOrPullRepo
+   * [] Return file content
+   */
+  public async getFileContent(
+    owner: string,
+    repoName: string,
+    file: string,
+  ): Promise<string> {
+    return '';
+  }
+
+  /**
+   * TODO list:
    * [] Clone repo
-   * [] Pull repo if exists
+   * [] Pull repo if exists (use git.cwd to set working directory)
    */
   private async cloneOrPullRepo(
     owner: string,
     repoName: string,
   ): Promise<void> {
     const repoUrl = `https://github.com/${owner}/${repoName}.git`;
-    const repoDir = path.resolve('repositories', owner, repoName);
+    const repoDir = path.join('repositories', owner, repoName); // FIXME: Use absolute path
 
     const git = simpleGit();
   }
@@ -55,7 +54,6 @@ export class FilesService {
    * TODO list:
    * [] implement createFileTree which returns FileNode[]
    * [] ignore .git directory
-   * [] use path.basename to extractfile/folder name from the path
    */
   private async createFileTree(currentDir: string): Promise<FileNode[]> {
     const entries = await fs.promises.readdir(currentDir, {
