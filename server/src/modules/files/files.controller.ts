@@ -11,7 +11,7 @@ export class FilesController {
     @Param('owner') owner: string,
     @Param('repoName') repoName: string,
   ): Promise<FileNode[]> {
-    return await this.filesService.getFiles(owner, repoName);
+    return this.filesService.getFiles(owner, repoName);
   }
 
   // TODO: Implement getFileContent.

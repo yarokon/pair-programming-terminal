@@ -5,7 +5,8 @@ import { simpleGit } from 'simple-git';
 
 // TODO: Change to discriminated union type
 export type FileNode = {
-  path: string;
+  name: string;
+  // path: string;
   type: 'file' | 'directory';
   children?: FileNode[];
 };
@@ -16,7 +17,6 @@ export class FilesService {
    * TODO list:
    * [] Use cloneOrPullRepo
    * [] Call createFileTree
-   * [] Handle 404 error
    */
   public async getFiles(owner: string, repoName: string): Promise<FileNode[]> {
     return [];
@@ -26,6 +26,7 @@ export class FilesService {
    * TODO list:
    * [] Use cloneOrPullRepo
    * [] Return file content
+   * [] Handle 404 error
    */
   public async getFileContent(
     owner: string,
@@ -54,6 +55,7 @@ export class FilesService {
    * TODO list:
    * [] implement createFileTree which returns FileNode[]
    * [] ignore .git directory
+   * [] use path.relative to get the relative path
    */
   private async createFileTree(currentDir: string): Promise<FileNode[]> {
     const entries = await fs.promises.readdir(currentDir, {
