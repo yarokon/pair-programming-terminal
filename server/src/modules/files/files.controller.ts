@@ -14,6 +14,6 @@ export class FilesController {
     return this.filesService.getFiles(owner, repoName);
   }
 
-  // TODO: Implement getFileContent.
+  // TODO: Implement getFileContent
   // GET http://localhost:3000/file-content/todo-md/todo-md?file=README.md
 }

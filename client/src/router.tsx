@@ -11,7 +11,7 @@ export const indexRoute = createRoute({
   path: '/',
   component: App,
   loader: async (): Promise<FileNode[]> => {
-    const res = await fetch('http://localhost:3000/files/todo-md/todo-md');
+    const res = await fetch('http://localhost:3000/files/yarokon/pair-programming-terminal');
 
     if (!res.ok) {
       throw new Error(`Failed to fetch files: ${res.status}`);

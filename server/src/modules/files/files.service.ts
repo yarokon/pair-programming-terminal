@@ -15,7 +15,7 @@ export type FileNode = {
 export class FilesService {
   /**
    * TODO list:
-   * [] Use cloneOrPullRepo
+   * [] Use cloneRepo
    * [] Call createFileTree
    */
   public async getFiles(owner: string, repoName: string): Promise<FileNode[]> {
@@ -54,6 +54,7 @@ export class FilesService {
    * [] implement createFileTree which returns FileNode[] (start with a simple version that only returns files in the root directory)
    * [] ignore .git directory
    * [] return relative path
+   * [] sort (directories first) // entryA.name.localeCompare(entryB.name, 'en-US', { numeric: true, sensitivity: 'base' });
    */
   private async createFileTree(currentDir: string): Promise<FileNode[]> {
     const entries = await fs.promises.readdir(currentDir, {
