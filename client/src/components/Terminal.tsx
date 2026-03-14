@@ -6,5 +6,9 @@ export function Terminal() {
     cd: (directory: string) => `changed path to ${directory}`,
   };
 
-  return <ReactTerminal height="30vh" commands={commands} />;
+  return (
+    <div style={{ height: '30vh' }}>
+      <ReactTerminal commands={commands} />
+    </div>
+  );
 }

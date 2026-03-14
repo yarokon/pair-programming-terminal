@@ -39,22 +39,12 @@ The client displays the file tree in the sidebar and opens files in the Monaco e
 sequenceDiagram
     participant Client
     participant Server
-    participant FS as Server Filesystem
     participant GitHub
 
     Client->>Server: GET /files/:owner/:repoName
-    Server->>GitHub: git clone / git pull
-    GitHub-->>FS: store repo
-    Server->>FS: read file tree
-    FS-->>Server: file tree
+    Server->>GitHub: git clone
+    GitHub-->>Server: repository data
     Server-->>Client: file tree []
-
-    Client->>Server: GET /file-content/:owner/:repoName?file=src/index.ts
-    Server->>GitHub: git clone / git pull
-    GitHub-->>FS: store repo
-    Server->>FS: read file
-    FS-->>Server: file content
-    Server-->>Client: { content }
 
     Client->>Client: render FileTree + Editor
 ```

@@ -17,7 +17,7 @@ export const indexRoute = createRoute({
       throw new Error(`Failed to fetch files: ${res.status}`);
     }
 
-    return res.json() as Promise<FileNode[]>;
+    return await res.json();
   },
 });
 

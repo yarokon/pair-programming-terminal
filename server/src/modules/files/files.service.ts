@@ -26,36 +26,34 @@ export class FilesService {
    * TODO list:
    * [] Use cloneOrPullRepo
    * [] Return file content
+   * [] Set appropriate content-type header
    * [] Handle 404 error
    */
-  public async getFileContent(
-    owner: string,
-    repoName: string,
-    file: string,
-  ): Promise<string> {
-    return '';
-  }
+  // public async getFileContent(
+  //   owner: string,
+  //   repoName: string,
+  //   file: string,
+  // ): Promise<string> {
+  //   return '';
+  // }
 
   /**
    * TODO list:
    * [] Clone repo
-   * [] Pull repo if exists (use git.cwd to set working directory)
+   * [] Handle error if clone repo second time fails
    */
-  private async cloneOrPullRepo(
-    owner: string,
-    repoName: string,
-  ): Promise<void> {
+  private async cloneRepo(owner: string, repoName: string): Promise<void> {
     const repoUrl = `https://github.com/${owner}/${repoName}.git`;
-    const repoDir = path.join('repositories', owner, repoName); // FIXME: Use absolute path
+    const repoDir = path.join('repositories', owner, repoName); // TODO: Use absolute path
 
-    const git = simpleGit();
+    const git = simpleGit(); // https://github.com/steveukx/git-js
   }
 
   /**
    * TODO list:
-   * [] implement createFileTree which returns FileNode[]
+   * [] implement createFileTree which returns FileNode[] (start with a simple version that only returns files in the root directory)
    * [] ignore .git directory
-   * [] use path.relative to get the relative path
+   * [] return relative path
    */
   private async createFileTree(currentDir: string): Promise<FileNode[]> {
     const entries = await fs.promises.readdir(currentDir, {
