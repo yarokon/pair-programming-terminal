@@ -17,7 +17,9 @@ export const indexRoute = createRoute({
       throw new Error(`Failed to fetch files: ${res.status}`);
     }
 
-    return await res.json();
+    const data = await res.json();
+
+    return data.map((el) => ({ ...el, id: el.name }));
   },
 });
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import fs from 'node:fs';
+import fs, { Dirent } from 'node:fs';
 import path from 'node:path';
 import { simpleGit } from 'simple-git';
 
@@ -7,8 +7,12 @@ import { simpleGit } from 'simple-git';
 export type FileNode = {
   name: string;
   // path: string;
-  type: 'file' | 'directory';
-  children?: FileNode[];
+  type: 'file'
+} | {
+  name: string;
+  // path: string;
+  type: 'directory';
+  children: FileNode[];
 };
 
 @Injectable()
@@ -19,7 +23,12 @@ export class FilesService {
    * [] Call createFileTree
    */
   public async getFiles(owner: string, repoName: string): Promise<FileNode[]> {
-    return [];
+
+    const dir = await this.cloneRepo(owner, repoName)
+
+    const tree = await this.createFileTree(dir)
+
+    return tree;
   }
 
   /**
@@ -42,11 +51,25 @@ export class FilesService {
    * [] Clone repo
    * [] Handle error if clone repo second time fails
    */
-  private async cloneRepo(owner: string, repoName: string): Promise<void> {
+  private async cloneRepo(owner: string, repoName: string): Promise<string> {
     const repoUrl = `https://github.com/${owner}/${repoName}.git`;
-    const repoDir = path.join('repositories', owner, repoName); // TODO: Use absolute path
+
+    const repoDir = path.resolve('repositories', owner, repoName); // TODO: Use absolute path
+
+    console.log('repoDir',repoDir)
 
     const git = simpleGit(); // https://github.com/steveukx/git-js
+
+
+    if (fs.existsSync(repoDir)) {
+        console.log('Path exists!');
+        await git.cwd(repoDir).pull(repoUrl)
+    } else{
+      const response = await git.clone(repoUrl, repoDir)
+      console.log('response', response)
+    } 
+
+    return repoDir
   }
 
   /**
@@ -60,7 +83,38 @@ export class FilesService {
     const entries = await fs.promises.readdir(currentDir, {
       withFileTypes: true, // Use entry.isDirectory() and entry.name
     });
+    const tree:FileNode[] = []
 
-    return [];
+    entries.forEach(el => {
+      if(el.isFile()){
+        tree.push({
+          name: el.name,
+          type: 'file'
+        })
+      }else if (el.isDirectory()){
+        // const files = await this.parseTreeToFile(path.join(el.parentPath, el.name))
+        tree.push({
+          name: el.name,
+          type: 'directory',
+          children: []
+        })
+      } else {
+
+      }
+    })
+
+
+
+    return tree;
   }
+
+  // private async parseTreeToFile(dir: string): Promise<> {
+  //   const entries = await fs.promises.readdir(dir, {
+  //     withFileTypes: true, // Use entry.isDirectory() and entry.name
+  //   });
+  //   const tree:FileNode[] = []
+
+    
+
+  // }
 }
