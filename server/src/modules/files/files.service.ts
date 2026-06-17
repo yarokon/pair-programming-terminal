@@ -111,7 +111,7 @@ export class FilesService {
       withFileTypes: true,
     });
 
-    const folders = entries.filter((entry) => entry.isDirectory());
+    const folders = entries.filter((entry) => entry.isDirectory() && entry.name !== '.git');
 
     const files = entries.filter((entry) => !entry.isDirectory());
 
